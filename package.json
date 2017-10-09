@@ -30,6 +30,7 @@
         "copy-webpack-plugin": "^4.1.1",
         "cross-env": "^5.0.5",
         "css-loader": "^0.28.7",
+        "d3": "^3.5.17",
         "file-loader": "^1.1.5",
         "gh-pages-deploy": "^0.4.2",
         "moment": "^2.18.1",

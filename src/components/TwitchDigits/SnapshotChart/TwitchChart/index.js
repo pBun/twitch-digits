@@ -1,5 +1,5 @@
 require('./style.css');
-import d3 from "./d3";
+import d3 from 'd3';
 import util from './util';
 import colorbrewer from './colorbrewer';
 
