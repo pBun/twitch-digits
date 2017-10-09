@@ -82,6 +82,7 @@ export default {
     watch: {
         snapshot() {
             if (!this.chart) return;
+            this.chartLevel = 'root';
             this.chart.init();
             this.chart.build(this.snapshot, this.clickable);
         }
