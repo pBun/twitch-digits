@@ -1,6 +1,6 @@
 # twitch-digits
 
-A visual breakdown of twitch.tv popularity sorted by game. Hosted at [http://digits2.twitch.pub](http://digits2.twitch.pub). This is a rework of the [original twitch digits app](https://github.com/pBun/twitch-digits-old) that I made over 2 years ago.
+This is a rework of the [original twitch digits app](https://github.com/pBun/twitch-digits-old) that I made over 2 years ago. Hosted at [http://digits2.twitch.pub](http://digits2.twitch.pub). The back-end code can be found (here)[https://github.com/pBun/twitch-digits-api].
 
 ## Local development
 
@@ -15,4 +15,4 @@ Build, serve, and watch:
 npm run dev
 ```
 
-Source files in `/src` compile to `/`.
+Source files in `/src` and `/public` compile to `/dist`.
