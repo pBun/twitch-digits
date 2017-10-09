@@ -77,10 +77,13 @@ a {
 }
 
 .tooltip .tooltip-inner {
-  background: black;
-  color: white;
-  border-radius: 16px;
-  padding: 5px 10px 4px;
+  background: rgb(100, 65, 165);
+  color: #fff;
+  border-radius: 5px;
+  border: 1px solid #fff;
+  letter-spacing: 0.05em;
+  padding: 0.2em 0.5em;
+  font-size: 13px;
 }
 
 .tooltip .tooltip-arrow {
@@ -89,7 +92,7 @@ a {
   border-style: solid;
   position: absolute;
   margin: 5px;
-  border-color: black;
+  border-color: rgb(100, 65, 165);
 }
 
 .tooltip[x-placement^="top"] {
@@ -101,7 +104,7 @@ a {
   border-left-color: transparent !important;
   border-right-color: transparent !important;
   border-bottom-color: transparent !important;
-  bottom: -5px;
+  bottom: -4px;
   left: calc(50% - 5px);
   margin-top: 0;
   margin-bottom: 0;
@@ -116,7 +119,7 @@ a {
   border-left-color: transparent !important;
   border-right-color: transparent !important;
   border-top-color: transparent !important;
-  top: -5px;
+  top: -4px;
   left: calc(50% - 5px);
   margin-top: 0;
   margin-bottom: 0;
@@ -131,7 +134,7 @@ a {
   border-left-color: transparent !important;
   border-top-color: transparent !important;
   border-bottom-color: transparent !important;
-  left: -5px;
+  left: -4px;
   top: calc(50% - 5px);
   margin-left: 0;
   margin-right: 0;
@@ -146,7 +149,7 @@ a {
   border-top-color: transparent !important;
   border-right-color: transparent !important;
   border-bottom-color: transparent !important;
-  right: -5px;
+  right: -4px;
   top: calc(50% - 5px);
   margin-left: 0;
   margin-right: 0;
