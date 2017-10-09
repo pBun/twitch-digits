@@ -23,8 +23,7 @@ function getJson(url) {
         get(url).then(res => {
             if (!res) reject('empty response - ' + url);
             var d = JSON.parse(res);
-            if (d.status === 'error') return reject(d.message);
-            resolve(d.data);
+            resolve(d);
         }, reject);
     });
 };
