@@ -51,6 +51,7 @@ a {
     bottom: 0;
     border: 0;
     max-width: 33%;
+    z-index: 1;
 }
 .header .fork-me img {
   display: block;
