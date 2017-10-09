@@ -49,22 +49,6 @@ export default {
               rootType === 'channel' ? scope.chartRootNode :
               scope.snapshot;
             return rootData || { name: '', viewers: 0 };
-        },
-        chartData(scope) {
-            var d = util.clone(scope.snapshot);
-            d.children = d.games.map(g => {
-              g.children = (g.streams || []).map(s => {
-                s.type = 'channel';
-                return s;
-              });
-              delete g.streams;
-              g.type = 'game';
-              return g;
-            });
-            delete d.games;
-            d.name = 'summary';
-            d.type = 'root';
-            return d;
         }
     },
     methods: {
@@ -73,17 +57,17 @@ export default {
             return 'url(' + v + ')';
         },
         rootChangeCallback(d) {
-            this.chartLevel = d.type;
-            this.chartRootNode = d;
+            this.chartLevel = d.data.type;
+            this.chartRootNode = d.data;
         },
         selectedCallback(s, b) {
-            this.chartSelectedNode = s;
-            this.chartBaseNode = b;
+            this.chartSelectedNode = (s || {}).data;
+            this.chartBaseNode = (b || {}).data;
         },
         handleResize() {
             if (!this.chart) return;
             this.chart.init();
-            this.chart.build(this.chartData, this.clickable);
+            this.chart.build(this.snapshot, this.clickable);
         }
     },
     filters: {
@@ -99,13 +83,13 @@ export default {
         snapshot() {
             if (!this.chart) return;
             this.chart.init();
-            this.chart.build(this.chartData, this.clickable);
+            this.chart.build(this.snapshot, this.clickable);
         }
     },
     mounted() {
         window.addEventListener('resize', this.handleResize);
         this.chart = new TwitchChart(this.$el, this.selectedCallback, this.rootChangeCallback);
-        if (this.snapshot) this.chart.build(this.chartData, this.clickable);
+        if (this.snapshot) this.chart.build(this.snapshot, this.clickable);
     },
     destroyed() {
         window.removeEventListener('resize', this.handleResize);
