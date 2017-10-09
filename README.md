@@ -1,6 +1,6 @@
 # twitch-digits
 
-This is a rework of the [original twitch digits app](https://github.com/pBun/twitch-digits-old) that I made over 2 years ago. Hosted at [http://digits2.twitch.pub](http://digits2.twitch.pub). The back-end code can be found (here)[https://github.com/pBun/twitch-digits-api].
+This is a rework of the [original twitch digits app](https://github.com/pBun/twitch-digits-old) that I made over 2 years ago. Hosted at [http://digits2.twitch.pub](http://digits2.twitch.pub). Back-end repo [here](https://github.com/pBun/twitch-digits-api).
 
 ## Local development
 
