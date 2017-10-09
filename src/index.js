@@ -1,4 +1,3 @@
-import './global.css';
 import Vue from 'vue';
 import App from './components/TwitchDigits/index.vue';
 

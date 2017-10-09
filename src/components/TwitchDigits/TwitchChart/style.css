@@ -12,6 +12,9 @@
   stroke: #fff;
   stroke-width: 0.25;
   transition: opacity 0.2s ease-in-out;
+}
+
+.chart.clickable path {
   cursor: pointer;
 }
 
@@ -25,4 +28,9 @@
 
 .chart.zoomed path.game {
   opacity: 0;
+}
+
+.chart .game__other,
+.chart .channel__other {
+  display: none;
 }

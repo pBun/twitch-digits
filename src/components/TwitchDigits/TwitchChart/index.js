@@ -6,7 +6,7 @@ import colorbrewer from './colorbrewer';
 var chart = {}; // hack to fix d3 losing prototype functions
 
 var TwitchChart = function(el, selectedCallback, rootChangeCallback) {
-  this.selectedCallback = typeof selectedCallback === 'function' ? selectedCallback : function(d) {};
+  this.selectedCallback = typeof selectedCallback === 'function' ? selectedCallback : function(cur, fb) {};
   this.rootChangeCallback = typeof rootChangeCallback === 'function' ? rootChangeCallback : function(d) {};
   this.state = {};
   // this.chart = {};
@@ -34,7 +34,7 @@ TwitchChart.prototype.init = function(el) {
 
   // make `colors` an ordinal scale
   chart.colors = chart.colors || d3.scale.ordinal()
-    .range(colorbrewer.Spectral[11]);
+    .range(colorbrewer.Spectral[10]);
 
   chart.visWrapper = (chart.visWrapper || d3.select(chart.wrapper).append('svg:svg'))
       .attr('class', 'chart')
@@ -46,7 +46,12 @@ TwitchChart.prototype.init = function(el) {
       .attr('transform', 'translate(' + chart.width / 2 + ',' + chart.height / 2 + ')');
 
   chart.partition = (chart.partition || d3.layout.partition())
-      .value(function(d) { return d.viewers; });
+      .value(function(d) { return d.viewers; })
+      .sort(function(a, b) {
+        return a.name === '_other' ? 1 :
+          b.name === '_other' ? -1 :
+          b.viewers - a.viewers;
+      });
 
   chart.arc = (chart.arc || d3.svg.arc())
     .startAngle(function(d) { return Math.max(0, Math.min(2 * Math.PI, chart.x(d.x))); })
@@ -60,13 +65,22 @@ TwitchChart.prototype.init = function(el) {
       .attr('r', chart.radius)
       .style('opacity', 0);
 
+  return this;
+
 };
 
 TwitchChart.prototype.build = function(chartData) {
   // var chart = this.chart;
 
   // Keep track of current root
-  this.state.root = chartData;
+  this.state.root = this.addMissingData(chartData);
+
+  // Determine if we have children to click
+  this.state.clickable = !!this.state.root.children.reduce(function(t, g) {
+    return t + (g.children ? g.children.length : 0);
+  }, 0);
+  chart.visWrapper.classed('clickable', this.state.clickable)
+
 
   // For efficiency, filter nodes to keep only those large enough to see.
   var nodes = chart.partition.nodes(this.state.root);
@@ -85,7 +99,7 @@ TwitchChart.prototype.build = function(chartData) {
   chart.colors.domain(uniqueNames);
 
   chart.path = chart.vis
-    .data([chartData])
+    .data([this.state.root])
     .selectAll('path')
     .data(nodes);
 
@@ -97,7 +111,7 @@ TwitchChart.prototype.build = function(chartData) {
     .enter()
     .append('svg:path')
     .on('mouseover', this.mouseoverHandler.bind(this))
-    // .on('click', this.clickHandler.bind(this)) // TODO: re-enable when we have channels
+    .on('click', this.clickHandler.bind(this))
     .each(function(d) {
       // Setup for switching data: stash the old values for transition.
       d.x0 = d.x;
@@ -109,11 +123,31 @@ TwitchChart.prototype.build = function(chartData) {
     .attr('display', function(d) { return d.depth ? null : 'none'; })
     .attr('d', chart.arc)
     .attr('fill-rule', 'evenodd')
-    .attr('class', function(d) { return d.type; })
+    .attr('class', function(d) { return d.type + ' ' + d.type + '_' + JSON.stringify(d.name).replace( /\W/g , '').toLowerCase(); })
     .style('fill', function(d) { return chart.colors(d.type === 'channel' ? d.parent.name : d.name); });
 
   // Add the mouseleave handler to the bounding circle.
   chart.vis.on('mouseleave', this.mouseleaveHandler.bind(this));
+
+  return this;
+};
+
+TwitchChart.prototype.addMissingData = function(chartData) {
+    chartData.children.push({
+      type: 'game',
+      name: '_other',
+      viewers: chartData.viewers - chartData.children.reduce(function(t, g) { return (t.viewers || t) + g.viewers }, 0),
+      channels: chartData.channels - chartData.children.reduce(function(t, g) { return (t.channels || t) + g.channels }, 0)
+    });
+    chartData.children.forEach(function(g) {
+      if (!g.children || !g.children.length) return;
+      g.children.push({
+        type: 'channel',
+        name: '_other',
+        viewers: g.viewers - g.children.reduce(function(t, c) { return (t.viewers || t) + c.viewers }, 0)
+      })
+    });
+    return chartData;
 };
 
 TwitchChart.prototype.setCurrentNode = function(d) {
@@ -168,17 +202,19 @@ TwitchChart.prototype.removeCurrentNode = function() {
 // Fade all but the current sequence
 TwitchChart.prototype.mouseoverHandler = function(d) {
   this.setCurrentNode(d);
-  this.selectedCallback(this.state.current);
+  this.selectedCallback(this.state.current, this.state.currentGame);
 }
 
 // Restore everything to full opacity when moving off the visualization.
 TwitchChart.prototype.mouseleaveHandler = function(d) {
   this.removeCurrentNode();
-  this.selectedCallback(this.state.current);
+  this.selectedCallback(this.state.current, this.state.currentGame);
 }
 
 TwitchChart.prototype.clickHandler = function(d) {
   // var chart = this.chart;
+
+  if (!this.state.clickable) return;
 
   if (util.isMobile()) {
 

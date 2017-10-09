@@ -1,17 +1,16 @@
 <template>
-<div class="chart-wrapper">
+<div class="chart-wrapper" :class="[ 'level-' + chartLevel, { 'clickable': chart && chart.state.clickable }]">
     <div class="explanation" :style="{ backgroundImage: bgImg(selectedData.image) }">
         <div class="info">
-            <p class="inner-info" v-if="selectedGame">
+            <p class="inner-info" v-if="selectedData.type">
                 <span class="title">{{ selectedData.name }}</span>
-                <span class="stat">
-                  <strong class="value">{{ selectedGame.viewers | prettyNumber }} | {{ selectedGame.viewers / baseData.viewers | percent(2) }}</strong>
-                </span>
+                <span class="stat">{{ selectedData.viewers | prettyNumber }}</span>
+                <span class="stat">{{ selectedData.viewers / selectedBaseData.viewers | percent(2) }}</span>
             </p>
-            <p class="inner-info" v-if="snapshot && !selectedGame && !selectedChannel">
+            <p class="inner-info" v-if="!selectedData.type">
               <span class="stat">
                 <span class="icon"><svg viewBox="0 0 16 16" height="100%" version="1.1" width="100%" x="0px" y="0px"><path clip-rule="evenodd" d="M11,14H5H2v-1l3-3h2L5,8V2h6v6l-2,2h2l3,3v1H11z" fill-rule="evenodd"></path></svg></span>
-                <strong class="value">{{ baseData.viewers | prettyNumber }}</strong>
+                <span class="value">{{ rootData.viewers | prettyNumber }}</span>
               </span>
             </p>
         </div>
@@ -21,31 +20,49 @@
 </template>
 
 <script>
-import util from '../util';
+import util from '../../helpers/util';
 import TwitchChart from './TwitchChart';
 export default {
     props: [ 'snapshot' ],
     data() {
         return {
             chart: null,
-            chartState: {},
-            zoomed: false,
-            selectedGame: null,
-            selectedChannel: null
+            chartRootNode: null,
+            chartBaseNode: null,
+            chartSelectedNode: null,
+            chartLevel: 'root'
         };
     },
     computed: {
         selectedData(scope) {
-            return scope.selectedChannel || scope.selectedGame || scope.snapshot || { name: '', viewers: 0 };
+            return scope.chartSelectedNode || scope.chartBaseNode || {};
         },
-        baseData(scope) {
-            return scope.snapshot || { name: '', viewers: 0 };
+        selectedBaseData(scope) {
+            var selectedType = scope.chartSelectedNode && scope.chartSelectedNode.type;
+            return selectedType === 'game' ? scope.snapshot :
+              selectedType === 'channel' ? scope.chartBaseNode :
+              scope.snapshot || { name: '', viewers: 0 };
+        },
+        rootData(scope) {
+            var rootType = scope.chartLevel;
+            var rootData = rootType === 'root' ? scope.snapshot :
+              rootType === 'channel' ? scope.chartRootNode :
+              scope.snapshot;
+            return rootData || { name: '', viewers: 0 };
         },
         chartData(scope) {
             var d = util.clone(scope.snapshot);
-            d.children = d.games.map(g => { g.type = 'game'; return g; });
+            d.children = d.games.map(g => {
+              g.children = (g.streams || []).map(s => {
+                s.type = 'channel';
+                return s;
+              });
+              delete g.streams;
+              g.type = 'game';
+              return g;
+            });
             delete d.games;
-            d.name = 'games';
+            d.name = 'summary';
             d.type = 'root';
             return d;
         }
@@ -56,25 +73,17 @@ export default {
             return 'url(' + v + ')';
         },
         rootChangeCallback(d) {
-            this.zoomed = d.type === 'game';
-            this.selectedGame = this.zoomed ? d : this.selectedGame;
+            this.chartLevel = d.type;
+            this.chartRootNode = d;
         },
-        selectedCallback(d) {
-            if (!d && !this.zoomed) {
-                this.selectedGame = null;
-                this.selectedChannel = null;
-            } else if (!d) {
-                this.selectedChannel = null;
-            } else if (d.type === 'game') {
-                this.selectedGame = d;
-            } else if (d.type === 'channel') {
-                this.selectedChannel = d;
-            }
+        selectedCallback(s, b) {
+            this.chartSelectedNode = s;
+            this.chartBaseNode = b;
         },
         handleResize() {
             if (!this.chart) return;
             this.chart.init();
-            this.chart.build(this.chartData);
+            this.chart.build(this.chartData, this.clickable);
         }
     },
     filters: {
@@ -88,13 +97,15 @@ export default {
     },
     watch: {
         snapshot() {
-            this.chart =
-                this.chart || new TwitchChart(this.$el, this.selectedCallback, this.rootChangeCallback);
-            this.chart.build(this.chartData);
+            if (!this.chart) return;
+            this.chart.init();
+            this.chart.build(this.chartData, this.clickable);
         }
     },
     mounted() {
         window.addEventListener('resize', this.handleResize);
+        this.chart = new TwitchChart(this.$el, this.selectedCallback, this.rootChangeCallback);
+        if (this.snapshot) this.chart.build(this.chartData, this.clickable);
     },
     destroyed() {
         window.removeEventListener('resize', this.handleResize);
@@ -116,16 +127,18 @@ export default {
   right: 0;
   top: 0;
   bottom: 0;
-  width: 56.5%;
-  height: 56.5%;
-  width: 69.5%;
-  height: 69.5%;
+  width: 70%;
+  height: 70%;
   border-radius: 50%;
   text-align: center;
   color: #666;
   pointer-events: none;
   background: no-repeat;
   background-size: cover;
+}
+.chart-wrapper.clickable .explanation {
+  width: 56.5%;
+  height: 56.5%;
 }
 .chart-wrapper .explanation .info {
   position: absolute;
@@ -154,12 +167,24 @@ export default {
   display: block;
   margin-bottom: 0.2em;
   line-height: 1em;
+  letter-spacing: 0.05em;
 }
 .chart-wrapper .explanation .stat {
   font-size: 2em;
   display: block;
   margin-bottom: 0.1em;
   line-height: 1em;
+  display: inline-block;
+  vertical-align: middle;
+  font-weight: 400;
+}
+.chart-wrapper .explanation .stat:after {
+  content: '|';
+  font-weight: 100;
+  margin: 0 0.15em 0 0.25em;
+}
+.chart-wrapper .explanation .stat:last-child:after {
+  display: none;
 }
 .chart-wrapper .explanation .icon,
 .chart-wrapper .explanation .label,
@@ -185,7 +210,15 @@ export default {
   opacity: 0;
   transition: opacity 1s ease-in-out;
 }
-.chart-wrapper .chart-zoomed .explanation .back-info {
+.chart-wrapper.level-game .explanation .back-info {
   opacity: 0.5;
+}
+@media (max-width: 480px) {
+  .chart-wrapper .explanation .stat {
+    display: block;
+  }
+  .chart-wrapper .explanation .stat:after {
+    display: none;
+  }
 }
 </style>

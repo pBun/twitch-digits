@@ -13,12 +13,12 @@
 </template>
 
 <script>
-import http from '../../helpers/http';
+import api from '../../helpers/twitchPub';
 import moment from 'moment';
 import WalkingLoader from './WalkingLoader.vue';
 import ErrorModal from './ErrorModal.vue';
 import SnapshotMenu from './SnapshotMenu.vue';
-import SnapshotChart from './SnapshotChart/index.vue';
+import SnapshotChart from './SnapshotChart.vue';
 export default {
     data() {
         return {
@@ -57,7 +57,7 @@ export default {
         loadTimes() {
             this.loading = true;
             this.error = null;
-            return http.getJson('/api/snapshot/times')
+            return api.get('snapshot/times')
                 .then(t => {
                     t.push(this.now);
                     this.times = t;
@@ -67,10 +67,10 @@ export default {
         loadSnapshot(time) {
             this.loading = true;
             this.error = null;
-            var url = time ? '/api/snapshot/' + time : '/api/snapshot';
-            return http.getJson(url)
+            this.selectedTime = time;
+            var endpoint = time ? 'snapshot/' + time : 'snapshot';
+            return api.get(endpoint)
                 .then(s => {
-                    this.selectedTime = time;
                     if (!time) this.setNow(s);
                     this.snapshot = s
                 }, err => this.error = err)
@@ -90,6 +90,7 @@ export default {
 }
 .twitch-digits .chart-label {
     margin-bottom: 1em;
+    letter-spacing: 0.025em;
 }
 .twitch-digits .error-modal {
     display: none;
