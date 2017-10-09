@@ -1,14 +1,12 @@
 var path = require('path');
 var webpack = require('webpack');
-var HtmlWebpackPlugin = require('html-webpack-plugin');
-
-var p = process.env.NODE_ENV === 'production' ? './public' : './public_dev';
+var CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = {
-    entry: './public_src/index.js',
+    entry: './src/index.js',
     output: {
-        path: path.resolve(__dirname, p),
-        publicPath: '/',
+        path: path.resolve(__dirname, './dist/script'),
+        publicPath: '/script',
         filename: 'app.js'
     },
     module: {
@@ -43,12 +41,20 @@ module.exports = {
             'vue$': 'vue/dist/vue.esm.js'
         }
     },
+    devServer: {
+        historyApiFallback: true,
+        noInfo: true,
+        contentBase: './dist'
+    },
     performance: {
         hints: false
     },
     devtool: 'eval-source-map',
     plugins: [
-        new HtmlWebpackPlugin({ template: './public_src/index.html', filename: 'index.html' })
+        new CopyWebpackPlugin([{
+            from: 'public',
+            to: path.resolve(__dirname, './dist')
+        }])
     ]
 };
 
