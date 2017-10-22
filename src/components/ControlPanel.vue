@@ -66,7 +66,7 @@ export default {
     z-index: 999;
     letter-spacing: 0.1em;
   }
-  .control-panel.left .control-toggle .toggle-text {
+  .control-panel .control-toggle .toggle-text {
     display: block;
   }
 
@@ -88,7 +88,8 @@ export default {
     left: 0;
     right: 0;
     bottom: 100%;
-    height: 1.5em;
+    height: 2em;
+    padding: 0.5em;
   }
 
   /* left */

@@ -199,11 +199,14 @@ export default {
   opacity: 0.5;
 }
 @media (max-width: 480px) {
-  .chart-wrapper .explanation .stat {
-    display: block;
+  .chart-wrapper .explanation .title {
+    font-size: 1em;
   }
-  .chart-wrapper .explanation .stat:after {
-    display: none;
+  .chart-wrapper .explanation .stat {
+    font-size: 1em;
+  }
+  .chart-wrapper .explanation .back-info {
+    font-size: 0.75em;
   }
 }
 </style>
