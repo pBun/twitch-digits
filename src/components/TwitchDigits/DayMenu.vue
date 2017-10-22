@@ -6,6 +6,7 @@
 </template>
 
 <script>
+import util from '../../helpers/util';
 import { VTooltip } from 'v-tooltip';
 export default {
     props: [ 'days', 'selected' ],
@@ -17,8 +18,8 @@ export default {
         prettyDay(v) {
             var weekDays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
             var day = v.getDay();
-            var today = (new Date()).getDay();
-            return day !== today ? weekDays[v.getDay()] : 'Today';
+            var isToday = util.stripTime(new Date()).getDate() === v.getDate();
+            return !isToday ? weekDays[v.getDay()] : 'Today';
         },
         handleLink(day) {
             this.$emit('linkClick', day);
