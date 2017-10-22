@@ -6,8 +6,9 @@
     "scripts": {
         "dev": "cross-env NODE_ENV=development webpack-dev-server --open --hot",
         "build": "cross-env NODE_ENV=production webpack --progress --hide-modules",
-        "deploy": "git branch -f gh-pages && git checkout gh-pages && git reset --hard origin/master && npm run build && cp -r dist/* . && npm run deploy-clean && git add -A",
-        "deploy-clean": "rimraf README.md src public .babelrc webpack.config.js package.json package-lock.json"
+        "deploy-clean": "rimraf README.md src public .babelrc webpack.config.js package.json package-lock.json",
+        "deploy-prep": "git branch -f gh-pages && git checkout gh-pages && git reset --hard origin/master && npm run build && cp -r dist/* . && npm run deploy-clean",
+        "deploy": "npm run deploy-prep && git add -A && git commit -m \"gh-pages deploy\" && git push origin gh-pages --force && git checkout master"
     },
     "dependencies": {
         "vue": "^2.4.4"
