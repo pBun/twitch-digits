@@ -6,18 +6,8 @@
     "scripts": {
         "dev": "cross-env NODE_ENV=development webpack-dev-server --open --hot",
         "build": "cross-env NODE_ENV=production webpack --progress --hide-modules",
-        "deploy": "gh-pages-deploy",
+        "deploy": "git branch -f gh-pages && git checkout gh-pages && git reset --hard origin/master && npm run build && cp -r dist/* . && npm run deploy-clean && git add -A",
         "deploy-clean": "rimraf README.md src public .babelrc webpack.config.js package.json package-lock.json"
-    },
-    "gh-pages-deploy": {
-        "staticpath": "dist",
-        "prep": [
-            "build"
-        ],
-        "post": [
-            "deploy-clean"
-        ],
-        "noprompt": true
     },
     "dependencies": {
         "vue": "^2.4.4"
@@ -31,7 +21,6 @@
         "css-loader": "^0.28.7",
         "d3": "^4.11.0",
         "file-loader": "^1.1.5",
-        "gh-pages-deploy": "^0.4.2",
         "moment": "^2.18.1",
         "style-loader": "^0.19.0",
         "v-tooltip": "^2.0.0-rc.2",
