@@ -1,15 +1,21 @@
 <template>
-<div class="twitch-digits" :class="{ 'loading': loading || error }">
-    <div class="twitch-digits-main">
-        <h2 class="chart-label">viewership as of {{ prettyTime }}</h2>
-        <div class="snapshot-chart-wrapper">
-            <snapshot-chart :snapshot="snapshot"></snapshot-chart>
+<div class="twitch-digits">
+    <header class="header">
+        <div class="header-inner">
+            <h1 class="headline"><a class="logo" href="/">twitch digits</a></h1>
+            <h2 class="chart-label">viewership as of {{ prettyTime }}</h2>
         </div>
-        <day-menu :days="days" :selected="filteredDay" @linkClick="filterDay"></day-menu>
-    </div>
-    <snapshot-menu :times="filteredTimes" :selected="selectedTime" @linkClick="refresh"></snapshot-menu>
+        <fork-me href="https://github.com/pBun/twitch-digits"></fork-me>
+    </header>
+    <main class="main">
+        <snapshot-chart class="snapshot-chart" :snapshot="snapshot" :class="{ 'visible': (initialized && !loading) }"></snapshot-chart>
+        <control-panel class="control-panel" toggle-text="timeline" :open="controlsOpen" @open="handleControlsState" :class="{ 'visible': initialized }">
+            <day-menu :days="days" :selected="filteredDay" @linkClick="filterDay"></day-menu>
+            <snapshot-menu :times="filteredTimes" :selected="selectedTime" @linkClick="refresh"></snapshot-menu>
+        </control-panel>
+    </main>
     <walking-loader class="loader" :class="{ 'visible': (!initialized || loading) }"></walking-loader>
-    <error-modal :error="error"></error-modal>
+    <error-modal :error="error" :class="{ 'visible': error }"></error-modal>
 </div>
 </template>
 
@@ -19,6 +25,8 @@ import api from '../../helpers/twitchPub';
 import moment from 'moment';
 import WalkingLoader from '../WalkingLoader.vue';
 import ErrorModal from '../ErrorModal.vue';
+import ControlPanel from '../ControlPanel.vue';
+import ForkMe from '../ForkMe.vue';
 import SnapshotMenu from './SnapshotMenu.vue';
 import DayMenu from './DayMenu.vue';
 import SnapshotChart from './SnapshotChart.vue';
@@ -32,7 +40,8 @@ export default {
             selectedTime: null,
             selectedDay: null,
             now: null,
-            snapshot: null
+            snapshot: null,
+            controlsOpen: false
         }
     },
     computed: {
@@ -65,6 +74,7 @@ export default {
     },
     methods: {
         refresh(time) {
+            this.controlsOpen = false;
             return this.loadSnapshot(time)
                 .then(() => this.loadTimes());
         },
@@ -98,12 +108,15 @@ export default {
         },
         filterDay(day) {
             this.selectedDay = day;
+        },
+        handleControlsState(state) {
+            this.controlsOpen = state;
         }
     },
     created() {
         this.refresh().then(() => this.initialized = true);
     },
-    components: { SnapshotChart, WalkingLoader, ErrorModal, SnapshotMenu, DayMenu }
+    components: { SnapshotChart, WalkingLoader, ControlPanel, ErrorModal, SnapshotMenu, DayMenu, ForkMe }
 }
 </script>
 
@@ -111,52 +124,103 @@ export default {
 .twitch-digits {
     height: 100%;
 }
-.twitch-digits .walking-loader {
+.twitch-digits .main {
+    height: calc(85% - 2em - 20px);
+    margin: 0 20px;
+    position: relative;
+}
+
+/* header */
+.twitch-digits .header {
+    position: relative;
+    text-align: center;
+    height: 15%;
+}
+.twitch-digits .header .header-inner {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  transform: translateY(-50%);
+}
+.twitch-digits .header .logo {
+    display: inline-block;
+    font-size: 3.5em;
+    font-weight: 100;
+    line-height: 1em;
+    letter-spacing: -0.05em;
+    border-bottom: none;
+    margin-bottom: 0.075em;
+}
+.twitch-digits .header .chart-label {
+    letter-spacing: 0.025em;
+}
+.twitch-digits .fork-me {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    max-width: 25%;
+}
+
+/* loader */
+.twitch-digits .loader {
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+  display: none;
 }
+.twitch-digits .loader.visible {
+    display: block;
+}
+
+/* error */
 .twitch-digits .error-modal {
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   width: 100%;
-}
-.twitch-digits .chart-label {
-    margin-bottom: 1em;
-    letter-spacing: 0.025em;
-}
-.twitch-digits .day-menu {
-    margin-top: 0.5em;
-}
-.twitch-digits .error-modal {
-    display: none;
+  display: none;
 }
 .twitch-digits .error-modal.visible {
     display: block;
 }
-.twitch-digits .twitch-digits-main {
-    opacity: 1;
-    transition: 0.3s opacity;
-    height: 100%;
-    position: relative;
-}
-.twitch-digits.loading .twitch-digits-main {
+
+/* control panel */
+.twitch-digits .control-panel {
     opacity: 0;
+    transition: 0.3s opacity;
 }
-.twitch-digits .snapshot-chart-wrapper {
-    height: 80%;
+.twitch-digits .control-panel.visible {
+    opacity: 1;
 }
-.twitch-digits .loader {
-    display: none;
+.twitch-digits .control-content {
+    font-size: 0.7em;
+}
+.twitch-digits .snapshot-menu {
     position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    top: 2.3em;
+    bottom: 0;
+    left: 0;
+    right: 0;
 }
-.twitch-digits .loader.visible {
-    display: block;
+
+/* chart */
+.twitch-digits .snapshot-chart {
+    opacity: 0;
+    transition: 0.3s opacity;
 }
+.twitch-digits .snapshot-chart.visible {
+    opacity: 1;
+}
+
+/* responsive */
+@media (max-width: 480px) {
+    .twitch-digits .header .logo {
+        font-size: 2.5em;
+    }
+}
+
 </style>

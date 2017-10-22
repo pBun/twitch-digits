@@ -38,12 +38,11 @@ export default {
 .twitch-digits .day-link {
     display: block;
     text-align: center;
-    margin: 0.1em 0.5em;
+    margin: 0.6em 0.5em;
     padding: 0.05em 0;
     line-height: 1em;
     cursor: pointer;
     text-transform: uppercase;
-    font-size: 0.7em;
     color: rgba(100, 65, 165, 1);
     transition: border-color 0.3s;
     border-bottom: 1px solid transparent;

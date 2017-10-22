@@ -39,11 +39,7 @@ export default {
 
 <style>
 .twitch-digits .snapshot-menu {
-    position: absolute;
-    top: 90%;
-    bottom: 0;
-    left: 0;
-    right: 0;
+    min-height: 100px;
     display: flex;
     justify-content: center;
     align-items: flex-end;
