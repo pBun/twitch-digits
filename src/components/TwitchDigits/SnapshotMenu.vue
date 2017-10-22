@@ -1,7 +1,7 @@
 <template>
 <div class="snapshot-menu">
     <a class="snapshot-link" v-for="(t, i) in times" :key="t._time" :class="{ 'selected': t._time === selected }" :style="{ height: calcHeight(t.viewers) }"
-        @click="handleLink(t._time)" v-tooltip="prettyTime(t._time)">{{ i }}</a>
+        @click="handleLink($event, t._time)" v-tooltip="prettyTime(t._time)">{{ i }}</a>
 </div>
 </template>
 
@@ -29,7 +29,10 @@ export default {
             var d = new Date(v);
             return d.toLocaleTimeString();
         },
-        handleLink(time) {
+        handleLink(e, time) {
+            var event = document.createEvent('HTMLEvents');
+            event.initEvent('blur', true, false);
+            e.target.dispatchEvent(event);
             this.$emit('linkClick', time);
         }
     },
