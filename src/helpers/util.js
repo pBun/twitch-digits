@@ -24,4 +24,20 @@ var clone = function(obj) {
     return c;
 };
 
-module.exports = { isMobile, clone };
+var prettyNumber = function(v) {
+    return v.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+};
+
+var getDay = function(t) {
+    var day = t ? new Date(t) : new Date();
+    day.setHours(0, 0, 0, 0);
+    return day;
+};
+
+var stripTime = function(t) {
+    var day = t ? new Date(t) : new Date();
+    day.setHours(0, 0, 0, 0);
+    return day;
+};
+
+module.exports = { isMobile, clone, prettyNumber, stripTime, getDay };
