@@ -35,6 +35,8 @@ export default {
         return {
             initialized: false,
             loading: false,
+            loadingTimeout: null,
+            loadingDelay: 250,
             error: null,
             times: [],
             selectedTime: null,
@@ -73,6 +75,14 @@ export default {
         }
     },
     methods: {
+        startLoading() {
+            var scope = this;
+            this.loadingTimeout = setTimeout(() => scope.loading = true, scope.loadingDelay);
+        },
+        stopLoading() {
+            clearTimeout(this.loadingTimeout);
+            this.loading = false
+        },
         refresh(time) {
             this.controlsOpen = false;
             return this.loadSnapshot(time)
@@ -85,17 +95,18 @@ export default {
             };
         },
         loadTimes() {
-            this.loading = true;
+            this.startLoading();
             this.error = null;
             return api.get('snapshot/times')
                 .then(t => {
                     t.push(this.now);
                     this.times = t;
-                }, err => this.error = err)
-                .then(() => this.loading = false);
+                })
+                .catch(err => this.error = err)
+                .then(() => this.stopLoading());
         },
         loadSnapshot(time) {
-            this.loading = true;
+            this.startLoading();
             this.error = null;
             this.selectedTime = time;
             var endpoint = time ? 'snapshot/' + time : 'snapshot';
@@ -103,8 +114,9 @@ export default {
                 .then(s => {
                     if (!time) this.setNow(s);
                     this.snapshot = s
-                }, err => this.error = err)
-                .then(() => this.loading = false);
+                })
+                .catch(err => this.error = err)
+                .then(() => this.stopLoading());
         },
         filterDay(day) {
             this.selectedDay = day;
