@@ -18,10 +18,6 @@ export default {
 .walking-loader {
   width: 100px;
   height: 40px;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
 }
 .walking-loader .dot {
     width: 20px;

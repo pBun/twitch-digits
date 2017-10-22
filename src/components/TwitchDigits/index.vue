@@ -17,8 +17,8 @@
 import util from '../../helpers/util';
 import api from '../../helpers/twitchPub';
 import moment from 'moment';
-import WalkingLoader from './WalkingLoader.vue';
-import ErrorModal from './ErrorModal.vue';
+import WalkingLoader from '../WalkingLoader.vue';
+import ErrorModal from '../ErrorModal.vue';
 import SnapshotMenu from './SnapshotMenu.vue';
 import DayMenu from './DayMenu.vue';
 import SnapshotChart from './SnapshotChart.vue';
@@ -110,6 +110,19 @@ export default {
 <style>
 .twitch-digits {
     height: 100%;
+}
+.twitch-digits .walking-loader {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+.twitch-digits .error-modal {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
 }
 .twitch-digits .chart-label {
     margin-bottom: 1em;

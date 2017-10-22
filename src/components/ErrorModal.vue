@@ -11,13 +11,6 @@ export default {
 </script>
 
 <style>
-.error-modal {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 100%;
-}
 .error-modal .error {
   font-size: 20px;
   line-height: 1.2em;
