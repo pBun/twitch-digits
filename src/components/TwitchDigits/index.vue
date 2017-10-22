@@ -58,7 +58,7 @@ export default {
         },
         days(scope) {
             if (!scope.times || !scope.times.length) return [];
-            var days = scope.times.map(t => util.getDay(t._time));
+            var days = scope.times.map(t => t && util.stripTime(t._time));
             var unique = {};
             days = days.filter(d => unique.hasOwnProperty(d) ? false : (unique[d] = true));
             var numDays = Math.min(days.length, 7);
