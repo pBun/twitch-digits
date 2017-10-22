@@ -49,7 +49,9 @@ export default {
             if (!scope.times || !scope.times.length) return [];
             var days = scope.times.map(t => util.getDay(t._time));
             var unique = {};
-            return days.filter(d => unique.hasOwnProperty(d) ? false : (unique[d] = true));
+            days = days.filter(d => unique.hasOwnProperty(d) ? false : (unique[d] = true));
+            var numDays = Math.min(days.length, 7);
+            return days.slice(days.length - numDays, days.length);
         },
         filteredDay(scope) {
             if (scope.selectedDay) return scope.selectedDay;
