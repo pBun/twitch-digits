@@ -44,10 +44,8 @@ export default {
     cursor: pointer;
     text-transform: uppercase;
     color: rgba(100, 65, 165, 1);
-    transition: border-color 0.3s;
-    border-bottom: 1px solid transparent;
 }
 .twitch-digits .day-link.selected {
-    border-bottom-color: rgba(100, 65, 165, 0.5);
+    font-weight: 700;
 }
 </style>
