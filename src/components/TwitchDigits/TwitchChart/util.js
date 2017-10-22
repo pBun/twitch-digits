@@ -25,6 +25,7 @@ var clone = function(obj) {
 };
 
 var numLevels = function(d) {
+    if (!d || !d.games) return 0;
     var numStreams = d.games.reduce(function(t, g) {
       return t + (g.streams ? g.streams.length : 0);
     }, 0);
