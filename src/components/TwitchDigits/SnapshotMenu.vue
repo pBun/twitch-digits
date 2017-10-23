@@ -32,7 +32,8 @@ export default {
             return d.toLocaleTimeString();
         },
         prettySimpleTime(v) {
-            var d = v ? new Date(v) : new Date();
+            if (!v) return '';
+            var d = new Date(v);
             d = d.getHours();
             return d === 0 ? (12 + ' AM') :
                 d <= 12 ? (d + ' AM') :
