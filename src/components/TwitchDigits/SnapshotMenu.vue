@@ -1,7 +1,9 @@
 <template>
 <div class="snapshot-menu">
     <a class="snapshot-link" v-for="(t, i) in times" :key="t._time" :class="{ 'selected': t._time === selected }" :style="{ height: calcHeight(t.viewers) }"
-        @click="handleLink($event, t._time)" v-tooltip="prettyTime(t._time)">{{ i }}</a>
+        @click="handleLink($event, t._time)" v-tooltip="prettyTime(t._time)">
+        <span class="text">{{ prettySimpleTime(t._time) }}</span>
+    </a>
 </div>
 </template>
 
@@ -29,6 +31,13 @@ export default {
             var d = new Date(v);
             return d.toLocaleTimeString();
         },
+        prettySimpleTime(v) {
+            var d = v ? new Date(v) : new Date();
+            d = d.getHours();
+            return d === 0 ? (12 + ' AM') :
+                d <= 12 ? (d + ' AM') :
+                d - 12 + ' PM';
+        },
         handleLink(e, time) {
             var event = document.createEvent('HTMLEvents');
             event.initEvent('blur', true, false);
@@ -48,18 +57,29 @@ export default {
     align-items: flex-end;
 }
 .twitch-digits .snapshot-link {
+    position: relative;
     display: block;
     width: 100%;
     text-align: center;
     cursor: pointer;
     background-color: rgba(100, 65, 165, 0.5);
     height: 10%;
-    text-indent: -100%;
     overflow: hidden;
     transition: background-color 0.3s;
     margin-left: 1px;
     margin-right: 1px;
     max-width: 40px;
+    color: #fff;
+}
+.twitch-digits .snapshot-link .text {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    text-align: center;
+    max-width: 2em;
+    margin: 0 auto;
+    line-height: 1.2em
 }
 .twitch-digits .snapshot-link:hover {
     background-color: rgba(100, 65, 165, 0.95);
