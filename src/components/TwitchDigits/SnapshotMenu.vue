@@ -88,4 +88,9 @@ export default {
 .twitch-digits .snapshot-link.selected {
     background-color: rgba(100, 65, 165, 1);
 }
+@media (max-width: 480px) {
+    .twitch-digits .snapshot-link .text {
+        font-size: 0.75em;
+    }
+}
 </style>
