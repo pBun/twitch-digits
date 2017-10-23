@@ -35,9 +35,9 @@ export default {
             if (!v) return '';
             var d = new Date(v);
             d = d.getHours();
-            return d === 0 ? (12 + ' AM') :
-                d <= 12 ? (d + ' AM') :
-                d - 12 + ' PM';
+            var afternoon = (d >= 12);
+            d = d > 12 ? d - 12 : d || 12;
+            return d + (afternoon ? ' PM' : ' AM');
         },
         handleLink(e, time) {
             var event = document.createEvent('HTMLEvents');
