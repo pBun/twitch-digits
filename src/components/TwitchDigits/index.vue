@@ -66,7 +66,9 @@ export default {
         },
         filteredDay(scope) {
             if (scope.selectedDay) return scope.selectedDay;
-            return scope.days && scope.days.length && scope.days[scope.days.length - 1] || util.stripTime(new Date());
+            if (!scope.days || !scope.days.length) return util.stripTime(new Date());
+            var latest = scope.days.reduce((a, b) => Math.max(a, b));
+            return new Date(latest);
         },
         filteredTimes(scope) {
             return scope.times.filter(t => {
