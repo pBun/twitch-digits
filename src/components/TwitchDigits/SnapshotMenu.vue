@@ -13,7 +13,12 @@ export default {
     props: [ 'times', 'selected' ],
     computed: {
         sortedTimes(scope) {
-            return scope.times.sort((a, b) => { new Date(a._time) - new Date(b._time); });
+            return scope.times.sort((a, b) => {
+                console.log(a._time, b._time);
+                if (!a._time) return 1;
+                if (!b._time) return -1;
+                return new Date(a._time) - new Date(b._time);
+            });
         },
         maxViewers(scope) {
             return scope.times

@@ -12,7 +12,11 @@ export default {
     props: [ 'days', 'selected' ],
     computed: {
         sortedDays(scope) {
-            return scope.days.sort((a, b) => { new Date(a) - new Date(b); });
+            return scope.days.sort((a, b) => {
+                if (!a) return 1;
+                if (!b) return -1;
+                return new Date(a) - new Date(b);
+            });
         },
     },
     methods: {
