@@ -1,6 +1,6 @@
 <template>
 <div class="snapshot-menu">
-    <a class="snapshot-link" v-for="(t, i) in times" :key="t._time" :class="{ 'selected': t._time === selected }" :style="{ height: calcHeight(t.viewers) }"
+    <a class="snapshot-link" v-for="(t, i) in sortedTimes" :key="t._time" :class="{ 'selected': t._time === selected }" :style="{ height: calcHeight(t.viewers) }"
         @click="handleLink($event, t._time)" v-tooltip="prettyTime(t._time)">
         <span class="text">{{ prettySimpleTime(t._time) }}</span>
     </a>
@@ -12,6 +12,9 @@ import { VTooltip } from 'v-tooltip';
 export default {
     props: [ 'times', 'selected' ],
     computed: {
+        sortedTimes(scope) {
+            return scope.times.sort((a, b) => { new Date(a._time) - new Date(b._time); });
+        },
         maxViewers(scope) {
             return scope.times
                 .map(a => a.viewers)

@@ -1,6 +1,6 @@
 <template>
 <div class="day-menu">
-    <a class="day-link" v-for="d in days" :class="{ 'selected': d.getDate() === selected.getDate() }"
+    <a class="day-link" v-for="d in sortedDays" :class="{ 'selected': d.getDate() === selected.getDate() }"
         v-tooltip="prettyDate(d)" @click="handleLink(d)">{{ prettyDay(d) }}</a>
 </div>
 </template>
@@ -10,6 +10,11 @@ import util from '../../helpers/util';
 import { VTooltip } from 'v-tooltip';
 export default {
     props: [ 'days', 'selected' ],
+    computed: {
+        sortedDays(scope) {
+            return scope.days.sort((a, b) => { new Date(a) - new Date(b); });
+        },
+    },
     methods: {
         prettyDate(v) {
             var d = new Date(v);
