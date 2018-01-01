@@ -64,7 +64,7 @@ TwitchChart.prototype.build = function(chartData) {
   chart.visWrapper.classed('clickable', this.state.clickable);
 
   // Keep track of current root
-  this.state.root = util.formatChartData(chartData, hasChannels);
+  this.state.root = util.formatChartData(chartData);
 
   chart.partition = d3.partition();
 

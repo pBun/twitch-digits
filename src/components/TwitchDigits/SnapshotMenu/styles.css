@@ -1,0 +1,42 @@
+.twitch-digits .snapshot-menu {
+    min-height: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+}
+.twitch-digits .snapshot-link {
+    position: relative;
+    display: block;
+    width: 100%;
+    text-align: center;
+    cursor: pointer;
+    background-color: rgba(100, 65, 165, 0.5);
+    height: 10%;
+    overflow: hidden;
+    transition: background-color 0.3s;
+    margin-left: 1px;
+    margin-right: 1px;
+    max-width: 40px;
+    color: #fff;
+}
+.twitch-digits .snapshot-link .text {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    text-align: center;
+    max-width: 2em;
+    margin: 0 auto;
+    line-height: 1.2em
+}
+.twitch-digits .snapshot-link:hover {
+    background-color: rgba(100, 65, 165, 0.95);
+}
+.twitch-digits .snapshot-link.selected {
+    background-color: rgba(100, 65, 165, 1);
+}
+@media (max-width: 480px) {
+    .twitch-digits .snapshot-link .text {
+        font-size: 0.75em;
+    }
+}

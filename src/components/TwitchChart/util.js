@@ -32,7 +32,7 @@ var numLevels = function(d) {
     return numStreams ? 2 : 1;
 };
 
-var formatChartData = function(apiData, hasChannels) {
+var formatChartData = function(apiData) {
     var d = apiData ? clone(apiData) : {};
     var hasStreams = numLevels(apiData) > 1;
     d.name = 'summary';
