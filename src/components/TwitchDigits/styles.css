@@ -1,0 +1,106 @@
+.twitch-digits {
+    height: 100%;
+}
+.twitch-digits .main {
+    height: calc(85% - 2em - 20px);
+    margin: 0 20px;
+    position: relative;
+}
+
+/* header */
+.twitch-digits .header {
+    position: relative;
+    text-align: center;
+    height: 15%;
+}
+.twitch-digits .header .header-inner {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  transform: translateY(-50%);
+}
+.twitch-digits .header .logo {
+    display: inline-block;
+    font-size: 3.5em;
+    font-weight: 100;
+    line-height: 1em;
+    letter-spacing: -0.05em;
+    border-bottom: none;
+    margin-bottom: 0.075em;
+}
+.twitch-digits .header .chart-label {
+    letter-spacing: 0.025em;
+}
+.twitch-digits .fork-me {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    max-width: 25%;
+}
+
+/* loader */
+.twitch-digits .walking-loader {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+.twitch-digits.initialized .walking-loader {
+  display: none;
+}
+.twitch-digits.loading .walking-loader {
+  display: block;
+}
+
+/* error */
+.twitch-digits .error-modal {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  display: none;
+}
+.twitch-digits .error-modal.visible {
+    display: block;
+}
+
+/* control panel */
+.twitch-digits .control-panel {
+    opacity: 0;
+    transition: 0.3s opacity;
+}
+.twitch-digits.initialized .control-panel {
+    opacity: 1;
+}
+.twitch-digits .control-content {
+    font-size: 0.7em;
+}
+.twitch-digits .snapshot-menu {
+    position: absolute;
+    top: 2.3em;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
+
+/* chart */
+.twitch-digits .snapshot-chart {
+    opacity: 0;
+    transition: 0.3s opacity;
+}
+.twitch-digits.initialized .snapshot-chart {
+    opacity: 1;
+}
+.twitch-digits.loading .snapshot-chart {
+    opacity: 0;
+}
+
+/* responsive */
+@media (max-width: 480px) {
+    .twitch-digits .header .logo {
+        font-size: 2.5em;
+    }
+}

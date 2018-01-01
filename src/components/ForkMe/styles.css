@@ -1,0 +1,10 @@
+.fork-me {
+	display: inline-block;
+    border: 0;
+}
+.fork-me img {
+	display: block;
+	max-width: 100%;
+	max-height: 100%;
+	margin-left: auto;
+}

@@ -1,16 +1,3 @@
-<template>
-<div class="error-modal" :class="{ 'visible': error }">
-    <p class="error api-error">{{ error }}</p>
-</div>
-</template>
-
-<script>
-export default {
-    props: [ 'error' ]
-}
-</script>
-
-<style>
 .error-modal .error {
   font-size: 20px;
   line-height: 1.2em;
@@ -30,4 +17,3 @@ export default {
     margin-top: 1em;
     display: block;
 }
-</style>

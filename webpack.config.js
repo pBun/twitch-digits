@@ -3,7 +3,7 @@ var webpack = require('webpack');
 var CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = {
-    entry: './src/index.js',
+    entry: './src/index.jsx',
     output: {
         path: path.resolve(__dirname, './dist/script'),
         publicPath: '/script',
@@ -12,13 +12,12 @@ module.exports = {
     module: {
         rules: [
             {
-                test: /\.vue$/,
-                loader: 'vue-loader'
-            },
-            {
-                test: /\.js$/,
+                test: /\.(js|jsx)$/,
                 loader: 'babel-loader',
-                exclude: /node_modules/
+                exclude: /(node_modules|public\/)/,
+                query: {
+                    presets: ['env', 'react']
+                }
             },
             {
                 test: /\.css$/,
@@ -35,11 +34,6 @@ module.exports = {
                 }
             }
         ]
-    },
-    resolve: {
-        alias: {
-            'vue$': 'vue/dist/vue.esm.js'
-        }
     },
     devServer: {
         historyApiFallback: true,

@@ -24,6 +24,9 @@ a {
     border-bottom: 1px solid transparent;
     transition: border-color 0.2s ease-in-out;
 }
+#app {
+  height: 100%;
+}
 
 /* # Tooltips
 ================================================== */
