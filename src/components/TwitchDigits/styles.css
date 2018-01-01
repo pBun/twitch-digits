@@ -94,7 +94,7 @@
 .twitch-digits.initialized .snapshot-chart {
     opacity: 1;
 }
-.twitch-digits.loading .snapshot-chart {
+.twitch-digits.initialized.loading .snapshot-chart {
     opacity: 0;
 }
 

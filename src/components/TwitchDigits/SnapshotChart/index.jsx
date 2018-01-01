@@ -92,13 +92,13 @@ class TwitchDigits extends Component {
         } else {
           innerInfo = (<p className="inner-info">
                     <span className="stat">
-                    <span className="icon"><svg viewBox="0 0 16 16" height="100%" version="1.1" width="100%" x="0px" y="0px"><path clip-rule="evenodd" d="M11,14H5H2v-1l3-3h2L5,8V2h6v6l-2,2h2l3,3v1H11z" fill-rule="evenodd"></path></svg></span>
+                    <span className="icon"><svg viewBox="0 0 16 16" height="100%" version="1.1" width="100%" x="0px" y="0px"><path clipRule="evenodd" d="M11,14H5H2v-1l3-3h2L5,8V2h6v6l-2,2h2l3,3v1H11z" fillRule="evenodd"></path></svg></span>
                     <span className="value">{ util.prettyNumber(rootData.viewers) }</span>
                 </span>
             </p>);
         }
         return ( 
-          <div className={classNames('chart-wrapper', 'level-' + this.state.chartLevel, { 'clickable': this.state.chart && this.state.chart.state.clickable })} ref={(el) => { this.$el = el; }}>
+          <div className={classNames('snapshot-chart', 'chart-wrapper', 'level-' + this.state.chartLevel, { 'clickable': this.state.chart && this.state.chart.state.clickable })} ref={(el) => { this.$el = el; }}>
               <div className="explanation" style={ { backgroundImage: this.bgImg(selectedData.image) } }>
                   <div className="info">
                       {innerInfo}
