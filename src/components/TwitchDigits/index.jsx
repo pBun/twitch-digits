@@ -31,7 +31,7 @@ class TwitchDigits extends Component {
     };
 
     componentDidMount() {
-        this.refresh().then(() => this.setInitialized(true));
+        this.refresh();
     };
 
     componentDidUpdate() {
@@ -39,55 +39,44 @@ class TwitchDigits extends Component {
     };
 
     refresh(time) {
-        return this.loadSnapshot(time)
-            .then(() => this.loadTimes());
-    };
 
-    loadSnapshot(time) {
-        const isMobile = util.isMobile();
-        this.startLoading();
-        if (!isMobile) ReactTooltip.hide();
-        this.setState({selectedTime: time, controlsOpen: isMobile});
-        var endpoint = time ? 'snapshot/' + time : 'snapshot';
-        return api.get(endpoint)
-            .then(s => {
-                let state = {
-                    snapshot: s,
-                    loading: false
-                };
-                if (!time) state.now = s;
+        // set loading state
+        this.setLoadingState(time);
+
+        // get api data and update state
+        var state = {};
+        return api.get(time ? 'snapshot/' + time : 'snapshot')
+            .then(snapshot => {
+                state.snapshot = snapshot;
+                if (!time) state.now = snapshot;
+                return api.get('snapshot/times');
+            })
+            .then(times => {
+                times.push(state.now || this.state.now);
+                state.times = times;
+            })
+            .catch(err => {
+                state.error = err.toString();
+            })
+            .then(() => {
+                clearTimeout(this.loadingTimeout);
+                state.initialized = true;
+                state.loading = false;
+                console.log(state);
                 this.setState(state);
-            })
-            .catch(err => {
-                this.setState({ error: err, loading: false });
-            })
-            .then(() => this.stopLoading());
+            });
     };
 
-    loadTimes() {
-        this.startLoading();
-        return api.get('snapshot/times')
-            .then(t => {
-                t.push(this.state.now);
-                this.setState({ times: t, loading: false });
-            })
-            .catch(err => {
-                this.setState({ error: err, loading: false });
-            })
-            .then(() => this.stopLoading());
-    };
-
-    startLoading() {
-        this.loadingTimeout = setTimeout(() => this.setState({ error: null, loading: true }), this.props.loadingDelay);
-    };
-
-    stopLoading() {
-        if (this.state.loading) this.setState({loading: false});
-        clearTimeout(this.loadingTimeout);
-    };
-
-    setInitialized(initialized) {
-        this.setState({initialized: initialized});
+    setLoadingState(time) {
+        this.loadingTimeout = setTimeout(() => this.setState({ loading: true }), this.props.loadingDelay);
+        const isMobile = util.isMobile();
+        if (!isMobile) ReactTooltip.hide();
+        var state = {
+            error: null,
+            selectedTime: time,
+            controlsOpen: isMobile
+        };
+        this.setState(state);
     };
 
     handleControlsToggle() {
@@ -133,7 +122,7 @@ class TwitchDigits extends Component {
         const times = this.getDateTimes(day.getDate());
         ReactTooltip.rebuild();
         return ( 
-            <div className={classNames('twitch-digits', {'initialized': this.state.initialized, 'loading': this.state.loading})}>
+            <div className={classNames('twitch-digits', {'initialized': this.state.initialized, 'loading': this.state.loading, 'error': !!this.state.error })}>
                 <header className="header">
                     <div className="header-inner">
                         <h1 className="headline"><a className="logo" href="/">twitch digits</a></h1>
