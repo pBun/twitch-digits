@@ -46,8 +46,6 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-}
-.twitch-digits.initialized .walking-loader {
   display: none;
 }
 .twitch-digits.loading .walking-loader {
@@ -63,17 +61,24 @@
   width: 100%;
   display: none;
 }
-.twitch-digits .error-modal.visible {
+.twitch-digits.error .error-modal {
     display: block;
+}
+
+/* main */
+.twitch-digits .main {
+  visibility: hidden;
+}
+.twitch-digits.initialized .main {
+  visibility: visible;
 }
 
 /* control panel */
 .twitch-digits .control-panel {
-    opacity: 0;
     transition: 0.3s opacity, 0.3s transform;
 }
-.twitch-digits.initialized .control-panel {
-    opacity: 1;
+.twitch-digits.error .control-panel {
+    opacity: 0;
 }
 .twitch-digits .control-content {
     font-size: 0.7em;
@@ -88,13 +93,10 @@
 
 /* chart */
 .twitch-digits .snapshot-chart {
-    opacity: 0;
     transition: 0.3s opacity;
 }
-.twitch-digits.initialized .snapshot-chart {
-    opacity: 1;
-}
-.twitch-digits.initialized.loading .snapshot-chart {
+.twitch-digits.initialized.loading .snapshot-chart,
+.twitch-digits.error .snapshot-chart {
     opacity: 0;
 }
 
