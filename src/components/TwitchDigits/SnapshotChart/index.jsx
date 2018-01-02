@@ -89,7 +89,7 @@ class TwitchDigits extends Component {
             innerInfo = (
                 <div className="inner-info">
                     <span className="title">{ selectedData.name }</span>
-                    <div class="stats">
+                    <div className="stats">
                         <span className="stat">{ util.prettyNumber(selectedData.viewers) }</span>
                         <span className="stat">{ util.prettyPercent(selectedData.viewers / selectedBaseData.viewers, 2) }</span>
                     </div>
@@ -98,7 +98,7 @@ class TwitchDigits extends Component {
         } else {
             innerInfo = (
                 <div className="inner-info">
-                    <div class="stats">
+                    <div className="stats">
                         <span className="stat">
                             <span className="icon"><svg viewBox="0 0 16 16" height="100%" version="1.1" width="100%" x="0px" y="0px"><path clipRule="evenodd" d="M11,14H5H2v-1l3-3h2L5,8V2h6v6l-2,2h2l3,3v1H11z" fillRule="evenodd"></path></svg></span>
                             <span className="value">{ util.prettyNumber(rootData.viewers) }</span>
