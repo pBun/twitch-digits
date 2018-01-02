@@ -44,8 +44,10 @@ class TwitchDigits extends Component {
     };
 
     loadSnapshot(time) {
+        const isMobile = util.isMobile();
         this.startLoading();
-        this.setState({selectedTime: time, controlsOpen: false});
+        if (!isMobile) ReactTooltip.hide();
+        this.setState({selectedTime: time, controlsOpen: isMobile});
         var endpoint = time ? 'snapshot/' + time : 'snapshot';
         return api.get(endpoint)
             .then(s => {

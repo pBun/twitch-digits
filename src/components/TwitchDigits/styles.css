@@ -70,7 +70,7 @@
 /* control panel */
 .twitch-digits .control-panel {
     opacity: 0;
-    transition: 0.3s opacity;
+    transition: 0.3s opacity, 0.3s transform;
 }
 .twitch-digits.initialized .control-panel {
     opacity: 1;
