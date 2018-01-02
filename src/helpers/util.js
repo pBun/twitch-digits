@@ -51,6 +51,12 @@ Util.prettyDate = function(v) {
     return d.toLocaleDateString();
 };
 
+Util.prettyTime = function(v) {
+    if (!v) return 'Now';
+    var d = new Date(v);
+    return d.toLocaleTimeString();
+};
+
 Util.prettyRelTime = function(v) {
     if (!v) return 'now';
     var diff = moment().diff(moment(v));

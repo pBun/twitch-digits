@@ -19,9 +19,11 @@ function SnapshotMenu({ times, selected, handleLink }) {
         return new Date(a._time) - new Date(b._time);
     });
     var snapshotLinks = sortedTimes.map(t => {
-        // TODO: add tooltipe for prettyTime(t._time)"
-        return (<a className={classNames('snapshot-link', {'selected': t._time === selected})} key={t._time} style={{ height: util.prettyPercent(t.viewers / maxViewers, 2) }}
-                onClick={handleLink.bind(this, t._time)}>
+        return (<a className={classNames('snapshot-link', {'selected': t._time === selected})}
+                key={t._time || 'now'}
+                style={{ height: util.prettyPercent(t.viewers / maxViewers, 2) }}
+                onClick={handleLink.bind(this, t._time)}
+                data-tip={util.prettyTime(t._time)}>
                 <span className="text">{ util.prettySimpleTime(t._time) }</span>
             </a>);
     });

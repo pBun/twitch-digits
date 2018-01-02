@@ -3,6 +3,7 @@ import { number } from 'prop-types';
 import classNames from 'classnames';
 import util from '../../helpers/util';
 import api from '../../helpers/twitchPub';
+import ReactTooltip from 'react-tooltip';
 import ForkMe from '../ForkMe/index.jsx';
 import ErrorModal from '../ErrorModal/index.jsx';
 import ControlPanel from '../ControlPanel/index.jsx';
@@ -31,6 +32,10 @@ class TwitchDigits extends Component {
 
     componentDidMount() {
         this.refresh().then(() => this.setInitialized(true));
+    };
+
+    componentDidUpdate() {
+        ReactTooltip.rebuild();
     };
 
     refresh(time) {
@@ -124,6 +129,7 @@ class TwitchDigits extends Component {
         const days = this.getDays();
         const day = this.getSelectedDay();
         const times = this.getDateTimes(day.getDate());
+        ReactTooltip.rebuild();
         return ( 
             <div className={classNames('twitch-digits', {'initialized': this.state.initialized, 'loading': this.state.loading})}>
                 <header className="header">
@@ -142,6 +148,7 @@ class TwitchDigits extends Component {
                 </main>
                 <WalkingLoader />
                 <ErrorModal error={this.state.error} />
+                <ReactTooltip place="top" border="true" effect="solid" />
             </div>
         );
     }

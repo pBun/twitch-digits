@@ -16,12 +16,11 @@ function DayMenu({ days, selected, handleLink }) {
         if (!b) return -1;
         return new Date(a) - new Date(b);
     });
-    var dayLinks = days.map(d => {
-        const isSelected = d.getDate() === selected.getDate();
-        const date = util.prettyDate(d);
-        const day = util.prettyDay(d);
-        // TODO: add date tooltip
-        return <a className={classNames('day-link', { 'selected': isSelected })} onClick={handleLink.bind(this, d)} key={d}>{day}</a>;//<a className={classNames('day-link', {'selected': isSelected})} onClick={handleLink(d)}>{ day }</a>;
+    const dayLinks = days.map(d => {
+        let isSelected = d.getDate() === selected.getDate();
+        let date = util.prettyDate(d);
+        let day = util.prettyDay(d);
+        return <a className={classNames('day-link', { 'selected': isSelected })} onClick={handleLink.bind(this, d)} data-tip={date} key={d}>{day}</a>;
     });
     return (
         <div className="day-menu">
