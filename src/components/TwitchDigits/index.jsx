@@ -150,7 +150,7 @@ class TwitchDigits extends Component {
                 </main>
                 <WalkingLoader />
                 <ErrorModal error={this.state.error} />
-                <ReactTooltip place="top" border="true" effect="solid" />
+                <ReactTooltip place="top" border={true} effect="solid" />
             </div>
         );
     }
