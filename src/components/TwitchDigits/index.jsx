@@ -62,7 +62,6 @@ class TwitchDigits extends Component {
                 clearTimeout(this.loadingTimeout);
                 state.initialized = true;
                 state.loading = false;
-                console.log(state);
                 this.setState(state);
             });
     };
