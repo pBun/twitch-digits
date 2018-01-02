@@ -16,7 +16,7 @@ import './styles.css';
 class TwitchDigits extends Component {
     constructor(props) {
         super(props);
-        this.state = { 
+        this.state = {
             initialized: false,
             loading: false,
             loadingTimeout: null,
@@ -54,9 +54,11 @@ class TwitchDigits extends Component {
             .then(times => {
                 times.push(state.now || this.state.now);
                 state.times = times;
+                state.error = null;
             })
             .catch(err => {
-                state.error = err.toString();
+                var error = typeof err === 'object' ? 'API CODE: ' + err.code : err.toString();
+                state.error = error;
             })
             .then(() => {
                 clearTimeout(this.loadingTimeout);
@@ -67,11 +69,10 @@ class TwitchDigits extends Component {
     };
 
     setLoadingState(time) {
-        this.loadingTimeout = setTimeout(() => this.setState({ loading: true }), this.props.loadingDelay);
+        this.loadingTimeout = setTimeout(() => this.setState({ loading: true, error: null }), this.props.loadingDelay);
         const isMobile = util.isMobile();
         if (!isMobile) ReactTooltip.hide();
         var state = {
-            error: null,
             selectedTime: time,
             controlsOpen: isMobile
         };
@@ -91,6 +92,14 @@ class TwitchDigits extends Component {
         event.initEvent('blur', true, false);
         e.target.dispatchEvent(event);
         this.refresh(s);
+    };
+
+    handleErrorClose() {
+      this.setState({ error: null });
+    };
+
+    handleErrorRefresh() {
+      this.refresh();
     };
 
     getDays() {
@@ -114,13 +123,13 @@ class TwitchDigits extends Component {
             return util.stripTime(t._time).getDate() === date;
         });
     };
-  
+
     render() {
         const days = this.getDays();
         const day = this.getSelectedDay();
         const times = this.getDateTimes(day.getDate());
         ReactTooltip.rebuild();
-        return ( 
+        return (
             <div className={classNames('twitch-digits', {'initialized': this.state.initialized, 'loading': this.state.loading, 'error': !!this.state.error })}>
                 <header className="header">
                     <div className="header-inner">
@@ -137,7 +146,7 @@ class TwitchDigits extends Component {
                     </ControlPanel>
                 </main>
                 <WalkingLoader />
-                <ErrorModal error={this.state.error} />
+                <ErrorModal error={this.state.error} onRefresh={this.handleErrorRefresh.bind(this)} onClose={this.handleErrorClose.bind(this)} />
                 <ReactTooltip place="top" border={true} effect="solid" />
             </div>
         );

@@ -1,8 +1,10 @@
-.error-modal .error {
+.error-modal {
   font-size: 20px;
+  padding: 1em;
+}
+.error-modal .error {
   line-height: 1.2em;
   color: #aa1122;
-  padding: 1em;
   background: rgba(255, 255, 255, 0.5);
 }
 .error-modal .error:before {
@@ -11,9 +13,15 @@
     display: block;
     margin-bottom: 0.25em;
 }
-.error-modal .error:after {
-    content: 'TRY REFRESHING';
-    font-size: 0.5em;
+.error-modal .button {
+    font-size: 16px;
+    letter-spacing: 0.05em;
+    text-transform: lowercase;
+    display: inline-block;
+    cursor: pointer;
     margin-top: 1em;
-    display: block;
+    background: rgb(100, 65, 165);
+    color: #fff;
+    padding: 0.5em 1em;
+    margin: 0.25em 0.5em;
 }
