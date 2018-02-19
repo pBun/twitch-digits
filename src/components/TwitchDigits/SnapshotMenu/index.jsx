@@ -19,7 +19,7 @@ function SnapshotMenu({ times, selected, handleLink }) {
         return new Date(a._time) - new Date(b._time);
     });
     var snapshotLinks = sortedTimes.map(t => {
-        return (<a className={classNames('snapshot-link', {'selected': t._time === selected})}
+        return (<a className={classNames('snapshot-link', {'selected': t._time === selected || !t._time && !selected})}
                 key={t._time || 'now'}
                 style={{ height: util.prettyPercent(t.viewers / maxViewers, 2) }}
                 onClick={handleLink.bind(this, t._time)}

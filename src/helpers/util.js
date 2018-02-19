@@ -42,7 +42,7 @@ Util.stripTime = function(t) {
 Util.prettyDay = function(v) {
     var weekDays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
     var day = v.getDay();
-    var isToday = Util.stripTime(new Date()).getDate() === v.getDate();
+    var isToday = Util.stripTime(new Date()).getTime() === v.getTime();
     return !isToday ? weekDays[v.getDay()] : 'Today';
 };
 

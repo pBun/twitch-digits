@@ -46,7 +46,10 @@ module.exports = {
             from: 'public',
             to: path.resolve(__dirname, './dist')
         }])
-    ]
+    ],
+    resolve: {
+        extensions: ['.js', '.jsx', '.css']
+    }
 };
 
 if (process.env.NODE_ENV === 'production') {

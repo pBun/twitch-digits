@@ -3,7 +3,7 @@ import * as d3 from 'd3';
 import util from './util';
 import colorbrewer from './colorbrewer';
 
-var TwitchChart = function(el, selectedCallback, rootChangeCallback) {
+function TwitchChart(el, selectedCallback, rootChangeCallback) {
   this.selectedCallback = typeof selectedCallback === 'function' ? selectedCallback : function(cur, fb) {};
   this.rootChangeCallback = typeof rootChangeCallback === 'function' ? rootChangeCallback : function(d) {};
   this.state = {};
@@ -56,15 +56,12 @@ TwitchChart.prototype.init = function(el) {
 TwitchChart.prototype.build = function(chartData) {
   var chart = this.chart;
 
-  // Determine if we have children to click
-  var hasChannels = util.numLevels(chartData) > 1;
-
-  // Chat becomes clickable if there are channels
-  this.state.clickable = hasChannels;
+  // Chat becomes clickable if there are nested charts
+  this.state.clickable = util.countNestedChildren(chartData) > 1;
   chart.visWrapper.classed('clickable', this.state.clickable);
 
   // Keep track of current root
-  this.state.root = util.formatChartData(chartData);
+  this.state.root = chartData;
 
   chart.partition = d3.partition();
 

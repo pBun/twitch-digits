@@ -17,7 +17,7 @@ function DayMenu({ days, selected, handleLink }) {
         return new Date(a) - new Date(b);
     });
     const dayLinks = days.map(d => {
-        let isSelected = d.getDate() === selected.getDate();
+        let isSelected = d.getTime() === selected.getTime();
         let date = util.prettyDate(d);
         let day = util.prettyDay(d);
         return <a className={classNames('day-link', { 'selected': isSelected })} onClick={handleLink.bind(this, d)} data-tip={date} key={d}>{day}</a>;

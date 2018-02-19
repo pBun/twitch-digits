@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { number } from 'prop-types';
 import classNames from 'classnames';
 import util from '../../helpers/util';
-import api from '../../helpers/twitchPub';
+import { selectors } from '../../store/modules/summarySnapshots';
 import ReactTooltip from 'react-tooltip';
 import ForkMe from '../ForkMe/index.jsx';
 import ErrorModal from '../ErrorModal/index.jsx';
@@ -13,19 +13,18 @@ import SnapshotMenu from './SnapshotMenu/index.jsx';
 import SnapshotChart from './SnapshotChart/index.jsx';
 import './styles.css';
 
+const isMobile = util.isMobile();
+
 class TwitchDigits extends Component {
     constructor(props) {
         super(props);
         this.state = {
             initialized: false,
             loading: false,
-            loadingTimeout: null,
             error: null,
-            times: [],
             selectedTime: null,
             selectedDay: null,
             now: null,
-            snapshot: null,
             controlsOpen: false
         };
     };
@@ -40,21 +39,14 @@ class TwitchDigits extends Component {
 
     refresh(time) {
 
-        // set loading state
-        this.setLoadingState(time);
+        // slight delay before we start loading
+        this.loadingTimeout = setTimeout(() => this.setState({ loading: true, error: null }), this.props.loadingDelay);
 
-        // get api data and update state
-        var state = {};
-        return api.get(time ? 'snapshot/' + time : 'snapshot')
-            .then(snapshot => {
-                state.snapshot = snapshot;
-                if (!time) state.now = snapshot;
-                return api.get('snapshot/times');
-            })
-            .then(times => {
-                times.push(state.now || this.state.now);
-                state.times = times;
-                state.error = null;
+        let state = {};
+        return this.props.loadSnapshot(time)
+            .then(() => {
+                if (!time) state.now = { ...this.props.snapshot.summary, _time: time };
+                return this.props.loadSummaries();
             })
             .catch(err => {
                 var error = typeof err === 'object' ? 'API CODE: ' + err.code : err.toString();
@@ -68,17 +60,6 @@ class TwitchDigits extends Component {
             });
     };
 
-    setLoadingState(time) {
-        this.loadingTimeout = setTimeout(() => this.setState({ loading: true, error: null }), this.props.loadingDelay);
-        const isMobile = util.isMobile();
-        if (!isMobile) ReactTooltip.hide();
-        var state = {
-            selectedTime: time,
-            controlsOpen: isMobile
-        };
-        this.setState(state);
-    };
-
     handleControlsToggle() {
         this.setState({controlsOpen: !this.state.controlsOpen});
     };
@@ -88,9 +69,17 @@ class TwitchDigits extends Component {
     };
 
     handleSnapshotLink(s, e) {
+
+        // clear anchor highlight
         var event = document.createEvent('HTMLEvents');
         event.initEvent('blur', true, false);
         e.target.dispatchEvent(event);
+
+        // update selected time and close drawer if desktop
+        this.setState({
+            selectedTime: s,
+            controlsOpen: isMobile
+        });
         this.refresh(s);
     };
 
@@ -102,15 +91,6 @@ class TwitchDigits extends Component {
       this.refresh();
     };
 
-    getDays() {
-        if (!this.state.times || !this.state.times.length) return [];
-        var days = this.state.times.map(t => util.stripTime(t && t._time));
-        var unique = {};
-        days = days.filter(d => unique.hasOwnProperty(d) ? false : (unique[d] = true));
-        var numDays = Math.min(days.length, 7);
-        return days.slice(days.length - numDays, days.length);
-    };
-
     getSelectedDay(days) {
         if (this.state.selectedDay) return this.state.selectedDay;
         if (!days || !days.length) return util.stripTime(new Date());
@@ -118,17 +98,12 @@ class TwitchDigits extends Component {
         return new Date(latest);
     };
 
-    getDateTimes(date) {
-        return this.state.times.filter(t => {
-            return util.stripTime(t._time).getDate() === date;
-        });
-    };
-
     render() {
-        const days = this.getDays();
-        const day = this.getSelectedDay();
-        const times = this.getDateTimes(day.getDate());
-        ReactTooltip.rebuild();
+        const summaries = [ ...this.props.summaries ];
+        if (this.state.now) summaries.push(this.state.now);
+        const days = selectors.getDays(summaries);
+        const day = this.getSelectedDay(days);
+        const times = selectors.getDayTimes(summaries, day);
         return (
             <div className={classNames('twitch-digits', {'initialized': this.state.initialized, 'loading': this.state.loading, 'error': !!this.state.error })}>
                 <header className="header">
@@ -139,7 +114,7 @@ class TwitchDigits extends Component {
                     <ForkMe href="https://github.com/pBun/twitch-digits" />
                 </header>
                 <main className="main">
-                    <SnapshotChart snapshot={this.state.snapshot} />
+                    <SnapshotChart snapshot={this.props.snapshot} />
                     <ControlPanel toggleText="timeline" open={this.state.controlsOpen} handleToggle={this.handleControlsToggle.bind(this)}>
                         <DayMenu days={days} selected={day} handleLink={this.handleDayLink.bind(this)} />
                         <SnapshotMenu times={times} selected={this.state.selectedTime} handleLink={this.handleSnapshotLink.bind(this)} />
