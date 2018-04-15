@@ -1,6 +1,6 @@
-import actions from "./actions";
+import * as actions from './actions';
 
-function fetchSnapshot(time) {
+export function fetchSnapshot(time) {
     return (dispatch, getState, { api }) => {
         dispatch(actions.requestSnapshot());
         let path = time ? 'snapshot/' + time : 'snapshot';
@@ -12,8 +12,4 @@ function fetchSnapshot(time) {
                 console.log(err);
             });
     }
-};
-
-export default {
-    fetchSnapshot
 };

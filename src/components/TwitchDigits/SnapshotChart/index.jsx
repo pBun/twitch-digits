@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { object } from 'prop-types';
 import classNames from 'classnames';
-import util from '../../../helpers/util';
-import { selectors } from '../../../store/modules/snapshot';
+import util from '../../../lib/util';
+import * as selectors from '../../../store/modules/snapshot/selectors';
 
 import TwitchChart from '../../TwitchChart';
 import './styles.css';
@@ -10,7 +10,7 @@ import './styles.css';
 class TwitchDigits extends Component {
     constructor(props) {
         super(props);
-        this.state = { 
+        this.state = {
             chart: null,
             chartRootNode: null,
             chartBaseNode: null,
@@ -107,7 +107,7 @@ class TwitchDigits extends Component {
           chartRootNode: d.data
         });
     };
-  
+
     selectedCallback(s, b) {
         this.setState({
           chartSelectedNode: (s || {}).data,
@@ -158,7 +158,7 @@ class TwitchDigits extends Component {
         const selectedData = this.getSelectedData();
         const selectedBaseData = this.getSelectedBaseData();
         const selectedDataDetails = this.getNodeDetails(selectedData);
-        
+
         var innerInfo;
         if (!rootData) {
             innerInfo = null;
@@ -184,7 +184,7 @@ class TwitchDigits extends Component {
                 </div>
             );
         }
-        return ( 
+        return (
           <div className={classNames('snapshot-chart', 'chart-wrapper', 'level-' + this.state.chartLevel, { 'clickable': this.state.chart && this.state.chart.state.clickable })} ref={(el) => { this.$el = el; }}>
               <div className="explanation" style={ { backgroundImage: this.bgImg(selectedDataDetails.image) } }>
                   <div className="info">

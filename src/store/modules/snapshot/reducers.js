@@ -1,7 +1,7 @@
-import { combineReducers } from "redux";
-import types from "./types";
+import { combineReducers } from 'redux';
+import * as types from './types';
 
-function snapshot(state = null, action = {}) {
+export default function snapshot(state = null, action = {}) {
     switch (action.type) {
         case types.SNAPSHOT_REQUEST:
             return state;
@@ -11,6 +11,3 @@ function snapshot(state = null, action = {}) {
             return state;
     }
 };
-
-
-export default snapshot;

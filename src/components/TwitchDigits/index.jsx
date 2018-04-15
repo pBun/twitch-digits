@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { number } from 'prop-types';
 import classNames from 'classnames';
-import util from '../../helpers/util';
-import { selectors } from '../../store/modules/summarySnapshots';
+import util from '../../lib/util';
+import * as selectors from '../../store/modules/summarySnapshots/selectors';
 import ReactTooltip from 'react-tooltip';
 import ForkMe from '../ForkMe/index.jsx';
 import ErrorModal from '../ErrorModal/index.jsx';

@@ -1,7 +1,7 @@
 import React from 'react';
 import { array, object, func } from 'prop-types';
 import classNames from 'classnames';
-import util from '../../../helpers/util';
+import util from '../../../lib/util';
 import './styles.css';
 
 DayMenu.propTypes = {

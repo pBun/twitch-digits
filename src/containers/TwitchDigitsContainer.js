@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 import TwitchDigits from '../components/TwitchDigits'
-import { operations as snapshotOperations } from '../store/modules/snapshot';
-import { operations as summaryOperations } from '../store/modules/summarySnapshots';
+import * as snapshotOperations from '../store/modules/snapshot/operations';
+import * as summaryOperations from '../store/modules/summarySnapshots/operations';
 
 function mapStateToProps(state) {
     return {

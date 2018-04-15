@@ -1,6 +1,6 @@
-import actions from "./actions";
+import * as actions from './actions';
 
-function fetchSummaries() {
+export function fetchSummaries() {
 	return (dispatch, getState, { api }) => {
         dispatch(actions.requestSummaries());
 
@@ -14,7 +14,4 @@ function fetchSummaries() {
     }
 };
 
-export default {
-    fetchSummaries,
-    addSummary: actions.addSummary
-};
+export const addSummary = actions.addSummary;

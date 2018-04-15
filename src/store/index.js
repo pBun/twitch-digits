@@ -1,8 +1,8 @@
 import { createStore, applyMiddleware, combineReducers } from 'redux';
 import thunk from 'redux-thunk';
-import summarySnapshots from './modules/summarySnapshots';
-import snapshot from './modules/snapshot'
-import twitchPubApi from '../helpers/twitchPub';
+import summarySnapshots from './modules/summarySnapshots/reducers';
+import snapshot from './modules/snapshot/reducers'
+import twitchPubApi from '../lib/twitchPub';
 
 // middlewares
 const createStoreWithMiddleware = applyMiddleware(
@@ -12,7 +12,7 @@ const createStoreWithMiddleware = applyMiddleware(
 // root reducer
 const reducer = combineReducers({
 	summarySnapshots,
-  	snapshot
+	snapshot
 });
 
 const configureStore = (initialState) => createStoreWithMiddleware(reducer, initialState);

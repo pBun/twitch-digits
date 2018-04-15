@@ -1,7 +1,7 @@
-import { combineReducers } from "redux";
-import types from "./types";
+import { combineReducers } from 'redux';
+import * as types from './types';
 
-function summaries(state = [], action = {}) {
+export default function summaries(state = [], action = {}) {
     switch (action.type) {
         case types.SUMMARIES_REQUEST:
             return state;
@@ -13,5 +13,3 @@ function summaries(state = [], action = {}) {
             return state;
     }
 };
-
-export default summaries;

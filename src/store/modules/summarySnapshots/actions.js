@@ -1,12 +1,12 @@
-import types from "./types";
+import * as types from './types';
 
-function requestSummaries() {
+export function requestSummaries() {
     return {
         type: types.SUMMARIES_REQUEST
     };
 };
 
-function receiveSummaries(summaries) {
+export function receiveSummaries(summaries) {
     return {
         type: types.SUMMARIES_RECEIVE,
         payload: summaries,
@@ -14,16 +14,10 @@ function receiveSummaries(summaries) {
     };
 };
 
-function addSummary(summary) {
+export function addSummary(summary) {
     console.log(summary);
     return {
         type: types.SUMMARY_ADD,
         payload: summary
     };
-};
-
-export default {
-    requestSummaries,
-    receiveSummaries,
-    addSummary
 };
