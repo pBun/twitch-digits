@@ -3,27 +3,6 @@ var isMobile = function() {
     return mobileRegex.test(window.navigator.userAgent);
 };
 
-var clone = function(obj) {
-    var c, i;
-
-    if (typeof obj !== 'object' || !obj)
-        return obj;
-
-    if (Array.isArray(obj)) {
-        c = [];
-        var len = obj.length;
-        for (i = 0; i < len; i++)
-            c[i] = clone(obj[i]);
-        return c;
-    }
-
-    c = {};
-    for (i in obj)
-        if (obj.hasOwnProperty(i))
-            c[i] = clone(obj[i]);
-    return c;
-};
-
 var prettyNumber = function(v) {
     return v.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 };
