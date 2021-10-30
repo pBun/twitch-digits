@@ -1,6 +1,6 @@
 import http from './http';
 
-var API_URL = window.location.hostname.indexOf('localhost') >= 0 ? '//localhost:5000/' : 'http://api.twitch.pub/';
+var API_URL = window.location.hostname.indexOf('localhost') >= 0 ? '//localhost:5000/' : '//api.twitch.pub/';
 
 export default {
     url: API_URL,
