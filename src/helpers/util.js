@@ -9,7 +9,7 @@ var clone = function(obj) {
     if (typeof obj !== 'object' || !obj)
         return obj;
 
-    if ('[object Array]' === Object.prototype.toString.apply(obj)) {
+    if (Array.isArray(obj)) {
         c = [];
         var len = obj.length;
         for (i = 0; i < len; i++)
