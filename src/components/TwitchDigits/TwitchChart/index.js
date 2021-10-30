@@ -1,4 +1,4 @@
-require('./style.css');
+import './style.css';
 import * as d3 from 'd3';
 import util from './util';
 import colorbrewer from './colorbrewer';

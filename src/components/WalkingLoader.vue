@@ -1,6 +1,6 @@
 <template>
 <div class="walking-loader">
-    <div class="dot" v-for="i in numDots"></div>
+    <div class="dot" v-for="i in numDots" v-bind:key="i"></div>
 </div>
 </template>
 

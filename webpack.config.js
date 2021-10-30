@@ -1,8 +1,10 @@
 var path = require('path');
 var webpack = require('webpack');
-var CopyWebpackPlugin = require('copy-webpack-plugin');
+var CopyPlugin = require('copy-webpack-plugin');
+const { VueLoaderPlugin } = require('vue-loader')
 
 module.exports = {
+    mode: process.env.NODE_ENV || 'production',
     entry: './src/index.js',
     output: {
         path: path.resolve(__dirname, './dist/script'),
@@ -23,9 +25,9 @@ module.exports = {
             {
                 test: /\.css$/,
                 use: [
-                    { loader: 'style-loader', options: { sourceMap: true } },
-                    { loader: 'css-loader', options: { sourceMap: true } }
-                ]
+                    'vue-style-loader',
+                    'css-loader'
+                ],
             },
             {
                 test: /\.(png|jpg|gif|svg)$/,
@@ -42,20 +44,21 @@ module.exports = {
         }
     },
     devServer: {
-        historyApiFallback: true,
-        noInfo: true,
-        contentBase: './public'
+        static: path.join(__dirname, 'public'),
     },
     performance: {
         hints: false
     },
     devtool: 'eval-source-map',
     plugins: [
-        new CopyWebpackPlugin([{
-            from: 'public',
-            to: path.resolve(__dirname, './dist')
-        }])
-    ]
+        new VueLoaderPlugin(),
+        new CopyPlugin({
+            patterns: [
+                { from: 'public', to: path.resolve(__dirname, './dist') },
+            ],
+            options: {},
+        }),
+    ],
 };
 
 if (process.env.NODE_ENV === 'production') {
