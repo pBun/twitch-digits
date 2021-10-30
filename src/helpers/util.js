@@ -13,4 +13,4 @@ var stripTime = function(t) {
     return day;
 };
 
-module.exports = { isMobile, clone, prettyNumber, stripTime };
+module.exports = { isMobile, prettyNumber, stripTime };

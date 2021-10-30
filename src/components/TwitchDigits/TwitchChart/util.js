@@ -54,4 +54,4 @@ var formatChartData = function(apiData, hasChannels) {
     return d;
 };
 
-module.exports = { isMobile, clone, formatChartData, numLevels };
+module.exports = { isMobile, formatChartData, numLevels };
